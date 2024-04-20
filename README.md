@@ -1,8 +1,8 @@
 # Oficina de Projetos No 17
 
-*NOME:* Upper Trends
+**NOME:** Upper Trends
 
-*PROBLEMA*
+**PROBLEMA**
 
 A Upper Trends é uma startup que recebeu um aporte para escalar seu negócio e conforme o contrato com investidores, precisa alcançar a marca de 2 milhões de usuários em 1 ano com uma estimativa de 1 milhão de acessos por dia e as campanhas de marketing começarão em 2 semanas.
 
@@ -12,15 +12,15 @@ Em testes feitos pela equipe técnica, a aplicação apresentou lentidão e anal
 
 O seu time de consultoria recebeu uma solicitação de proposta para execução do projeto.
 
-*OBJETIVO*
+**OBJETIVO**
 O objetivo é que a aplicação tenha alta disponibilidade e escalabilidade com o menor custo possível, cumprindo os pilares do Well Architect framework da AWS.
 
-> #### *DESCRIÇÃO TÉCNICA*
-> - Atualmente essa aplicação já está na AWS em uma instância EC2
-> - Aplicação desenvolvida em Dotnet core 7
-> - Banco de dados SQLServer
-> - Deve ser executados scripts para popular o Banco
-> - Scripts estão na plataforma de Ensino dentro do Projeto /Scripts do projeto
+## **DESCRIÇÃO TÉCNICA**
+- Atualmente essa aplicação já está na AWS em uma instância EC2
+- Aplicação desenvolvida em Dotnet core 7
+- Banco de dados SQLServer
+- Deve ser executados scripts para popular o Banco
+- Scripts estão na plataforma de Ensino dentro do Projeto /Scripts do projeto
 
 A aplicação já está usando como armazenamento de objetos o S3 da AWS.
 Arquivos para o storage já estão na estrutura de pastas que deve ficar e estão
