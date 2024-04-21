@@ -16,13 +16,27 @@ data "aws_subnets" "private-subnets" {
   }
 }
 
+module "launch-template" {
+  source = "./modules/launch-templates"
+
+  projeto = var.projeto
+
+  # security group
+  vpcid = var.vpcid
+
+  # instancia
+  key-pair      = var.key-pair
+  instance_type = var.instance_type
+}
+
 module "rds" {
   source = "./modules/rds"
 
-  projeto         = var.projeto
+  projeto = var.projeto
+
   # subnet groups
-  
   private_subnets = data.aws_subnets.private-subnets.ids
+
   # security group
   vpcid = var.vpcid
 

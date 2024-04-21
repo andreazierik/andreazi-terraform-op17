@@ -10,3 +10,6 @@ variable "db_engine_version" {}
 variable "db_username" {}
 variable "db_password" {}
 variable "db_instance" {}
+
+variable "key-pair" {}
+variable "instance_type" {}
