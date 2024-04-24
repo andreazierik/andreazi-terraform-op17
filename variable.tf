@@ -1,7 +1,4 @@
-variable "vpcid" {
-  type        = string
-  description = "Default VPC ID"
-}
+variable "vpcid" {}
 
 variable "projeto" {}
 
@@ -13,3 +10,6 @@ variable "db_instance" {}
 
 variable "key-pair" {}
 variable "instance_type" {}
+
+variable "any-ip" {}
+variable "bucket-name" {}
