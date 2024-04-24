@@ -8,6 +8,11 @@ variable "vpcid" {
   description = "ID da VPC"
 }
 
+variable "alb-sg" {
+  type        = string
+  description = "ID do SG do ALB"
+}
+
 variable "key-pair" {
   type        = string
   description = "Key Pair para conexao"

@@ -8,26 +8,35 @@ resource "aws_security_group" "lt-security-group" {
   }
 }
 
-# REGRA DE SAIDA PADRAO
-resource "aws_security_group_rule" "lt-security-group_egress_traffic" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.lt-security-group.id
-  cidr_blocks       = ["0.0.0.0/0"]
+resource "aws_security_group_rule" "ingress-ec2" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lt-security-group.id
+  source_security_group_id = var.alb-sg
 }
+
+# # REGRA DE SAIDA PADRAO
+# resource "aws_security_group_rule" "lt-security-group_egress_traffic" {
+#   type              = "egress"
+#   from_port         = 0
+#   to_port           = 0
+#   protocol          = "-1"
+#   security_group_id = aws_security_group.lt-security-group.id
+#   cidr_blocks       = ["0.0.0.0/0"]
+# }
 
 # FILTRAR AS AMI DA MINHA CONTA, PEGANDO PELA TAG NAME
 data "aws_ami" "app-projeto17" {
-  most_recent      = true
+  most_recent = true
 
   filter {
     name   = "name"
     values = ["app-projeto17"]
   }
 
-  owners           = ["self"]
+  owners = ["self"]
 }
 
 # CRIANDO LAUCH TEMPLATE
