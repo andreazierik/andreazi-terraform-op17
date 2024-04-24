@@ -22,11 +22,25 @@ module "launch-template" {
   projeto = var.projeto
 
   # security group
-  vpcid = var.vpcid
+  vpcid  = var.vpcid
+  alb-sg = module.alb.alb-sg
 
   # instancia
   key-pair      = var.key-pair
   instance_type = var.instance_type
+}
+
+module "alb" {
+  source = "./modules/alb"
+
+  projeto = var.projeto
+
+  # security group
+  vpcid  = var.vpcid
+  any-ip = [ var.any-ip ]
+
+  public-subnets-ids = data.aws_subnets.public-subnets.ids
+  bucket-name        = var.bucket-name
 }
 
 module "rds" {
