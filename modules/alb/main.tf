@@ -7,10 +7,19 @@ resource "aws_security_group" "alb-sg" {
   }
 }
 
-resource "aws_security_group_rule" "alb-sg-ingress" {
+resource "aws_security_group_rule" "alb-http-sg-ingress" {
   type              = "ingress"
   from_port         = 80
   to_port           = 80
+  protocol          = "tcp"
+  security_group_id = aws_security_group.alb-sg.id
+  cidr_blocks       = var.any-ip
+}
+
+resource "aws_security_group_rule" "alb-https-sg-ingress" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.alb-sg.id
   cidr_blocks       = var.any-ip
