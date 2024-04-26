@@ -16,6 +16,10 @@ data "aws_subnets" "private-subnets" {
   }
 }
 
+data "http" "meuip" {
+  url = "https://ifconfig.me/ip"
+}
+
 module "launch-template" {
   source = "./modules/launch-templates"
 
@@ -37,7 +41,7 @@ module "alb" {
 
   # security group
   vpcid  = var.vpcid
-  any-ip = [ var.any-ip ]
+  any-ip = [ "${data.http.meuip.response_body}/32" ]
 
   public-subnets-ids = data.aws_subnets.public-subnets.ids
   bucket-name        = var.bucket-name
