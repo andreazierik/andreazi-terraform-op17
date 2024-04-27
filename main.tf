@@ -16,6 +16,11 @@ data "aws_subnets" "private-subnets" {
   }
 }
 
+data "aws_route53_zone" "domain" {
+  name         = var.domain
+  private_zone = false
+}
+
 data "http" "meuip" {
   url = "https://ifconfig.me/ip"
 }
@@ -41,10 +46,21 @@ module "alb" {
 
   # security group
   vpcid  = var.vpcid
-  any-ip = [ "${data.http.meuip.response_body}/32" ]
+  any-ip = ["${data.http.meuip.response_body}/32"]
 
   public-subnets-ids = data.aws_subnets.public-subnets.ids
   bucket-name        = var.bucket-name
+
+  acm_arn = module.acm.acm_arn
+}
+
+module "acm" {
+  source = "./modules/acm"
+
+  domain         = var.domain
+  domain_zone_id = data.aws_route53_zone.domain.zone_id
+  alb_dns_name   = module.alb.dns_name
+  alb_zone_id    = module.alb.zone_id
 }
 
 module "rds" {
