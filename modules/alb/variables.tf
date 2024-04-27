@@ -22,3 +22,8 @@ variable "bucket-name" {
   type        = string
   description = "Bucket para armazenar os logs"
 }
+
+variable "acm_arn" {
+  type        = string
+  description = "ARN do ACM"
+}
