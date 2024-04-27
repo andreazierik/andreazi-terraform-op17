@@ -58,10 +58,33 @@ resource "aws_lb" "projeto17-alb" {
   }
 }
 
-resource "aws_lb_listener" "name" {
+resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.projeto17-alb.arn
   port              = "80"
   protocol          = "HTTP"
+
+  # default_action {
+  #   type             = "forward"
+  #   target_group_arn = aws_lb_target_group.projeto17-tg.arn
+  # }
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "alb_listener_tls" {
+  load_balancer_arn = aws_lb.projeto17-alb.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_arn
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
   default_action {
     type             = "forward"
