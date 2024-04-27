@@ -1,3 +1,4 @@
+variable "domain" {}
 variable "vpcid" {}
 
 variable "projeto" {}
