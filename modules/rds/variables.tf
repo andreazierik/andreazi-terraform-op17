@@ -13,6 +13,11 @@ variable "private_subnets" {
   description = "Subnets privadas"
 }
 
+variable "lt_sg_id" {
+  type = string
+  description = "ID do SG para configurar no RDS"
+}
+
 variable "db_engine" {
   type        = string
   description = "DB engine"

@@ -18,6 +18,15 @@ resource "aws_security_group" "rds-sqlserver-sg" {
   }
 }
 
+resource "aws_security_group_rule" "ec2-to-rds" {
+  type                     = "ingress"
+  from_port                = 1433
+  to_port                  = 1433
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rds-sqlserver-sg.id
+  source_security_group_id = var.lt_sg_id
+}
+
 # CRIACAO DO RDS UTILIZANDO O SQL SERVER
 resource "aws_db_instance" "rds-sqlserver" {
   engine                 = var.db_engine
