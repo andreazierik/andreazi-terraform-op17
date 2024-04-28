@@ -1,16 +1,28 @@
 resource "aws_autoscaling_group" "projeto17-app" {
-  name     = "${var.projeto}-asg"
-  min_size = var.min-capacity
-  max_size = var.max-capacity
+  name                = "${var.projeto}-asg"
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_capacity
+  min_size            = var.min_capacity
+  vpc_zone_identifier = var.private_subnets_ids
+  target_group_arns   = var.tg_arn
+  health_check_type   = "EC2"
 
-  health_check_type = "EC2"
+  launch_template {
+    id      = var.lt_id
+    version = var.lt_version
+  }
 
-  vpc_zone_identifier = var.public-subnets-ids
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["desired_capacity"]
+  }
 
-  target_group_arns = []
-}
-
-resource "aws_autoscaling_policy" "projeto17-app-scaling" {
-  name        = var.projeto
-  policy_type = "TargetTrackingScaling"
+  tag {
+    key                 = "Name"
+    value               = "${var.projeto}-app"
+    propagate_at_launch = true
+  }
 }
