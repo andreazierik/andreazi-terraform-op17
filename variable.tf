@@ -14,3 +14,8 @@ variable "instance_type" {}
 
 variable "any-ip" {}
 variable "bucket-name" {}
+variable "iam_instance_profile" {}
+
+variable "desired_capacity" {}
+variable "max_capacity" {}
+variable "min_capacity" {}
