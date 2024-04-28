@@ -26,9 +26,9 @@ resource "aws_acm_certificate_validation" "app" {
 }
 
 resource "aws_route53_record" "app" {
-  name    = "op17.${var.domain}"
+  name    = "alb.${var.domain}"
   type    = "A"
-  zone_id = "${var.domain_zone_id}"
+  zone_id = var.domain_zone_id
 
   alias {
     name                   = var.alb_dns_name
