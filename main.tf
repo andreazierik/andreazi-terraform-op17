@@ -25,6 +25,55 @@ data "http" "meuip" {
   url = "https://ifconfig.me/ip"
 }
 
+module "acm" {
+  source = "./modules/acm"
+
+  # insformacoes do dominio
+  domain         = var.domain
+  domain_zone_id = data.aws_route53_zone.domain.zone_id
+
+  # informacoes do ALB para setar como alias no record
+  alb_dns_name = module.alb.dns_name
+  alb_zone_id  = module.alb.zone_id
+}
+
+module "alb" {
+  source = "./modules/alb"
+
+  projeto = var.projeto
+
+  # security group
+  vpcid  = var.vpcid
+  any-ip = [ var.any-ip ] #["${data.http.meuip.response_body}/32"]
+
+  # zonas de disponibilidades
+  public-subnets-ids = data.aws_subnets.public-subnets.ids
+
+  # bucket para armazenar logs
+  bucket-name = var.bucket-name
+
+  # configurar acm no listener do ALB
+  acm_arn = module.acm.acm_arn
+}
+
+module "asg" {
+  source = "./modules/asg"
+
+  projeto = var.projeto
+
+  # capacidade do asg
+  desired_capacity = var.desired_capacity
+  max_capacity     = var.max_capacity
+  min_capacity     = var.min_capacity
+
+  # zonas de disponibilidades
+  private_subnets_ids = data.aws_subnets.private-subnets.ids
+  
+  tg_arn     = [ module.alb.tg_arn ]
+  lt_id      = module.launch-template.lt_id
+  lt_version = module.launch-template.lt_version
+}
+
 module "launch-template" {
   source = "./modules/launch-templates"
 
@@ -37,30 +86,7 @@ module "launch-template" {
   # instancia
   key-pair      = var.key-pair
   instance_type = var.instance_type
-}
-
-module "alb" {
-  source = "./modules/alb"
-
-  projeto = var.projeto
-
-  # security group
-  vpcid  = var.vpcid
-  any-ip = ["${data.http.meuip.response_body}/32"]
-
-  public-subnets-ids = data.aws_subnets.public-subnets.ids
-  bucket-name        = var.bucket-name
-
-  acm_arn = module.acm.acm_arn
-}
-
-module "acm" {
-  source = "./modules/acm"
-
-  domain         = var.domain
-  domain_zone_id = data.aws_route53_zone.domain.zone_id
-  alb_dns_name   = module.alb.dns_name
-  alb_zone_id    = module.alb.zone_id
+  iam_profile_name = var.iam_instance_profile
 }
 
 module "rds" {
@@ -73,6 +99,7 @@ module "rds" {
 
   # security group
   vpcid = var.vpcid
+  lt_sg_id = module.launch-template.sg_id
 
   # rds sql server
   db_engine         = var.db_engine
