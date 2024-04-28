@@ -25,6 +25,16 @@ resource "aws_security_group_rule" "alb-https-sg-ingress" {
   cidr_blocks       = var.any-ip
 }
 
+# REGRA DE SAIDA PADRAO
+resource "aws_security_group_rule" "alb_egress_traffic" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.alb-sg.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_lb_target_group" "projeto17-tg" {
   name     = "${var.projeto}-tg"
   port     = 80
@@ -36,7 +46,7 @@ resource "aws_lb_target_group" "projeto17-tg" {
     enabled             = true
     port                = 80
     interval            = 50
-    protocol            = "HTTP"
+    protocol            = "HTTPS"
     path                = "/"
     matcher             = "200-299"
     healthy_threshold   = 3

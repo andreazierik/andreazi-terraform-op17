@@ -12,3 +12,8 @@ output "zone_id" {
   value       = aws_lb.projeto17-alb.zone_id
   description = "ALB zone id"
 }
+
+output "tg_arn" {
+  value       = aws_lb_target_group.projeto17-tg.arn
+  description = "ARN para configurar no modulo ASG"
+}
