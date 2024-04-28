@@ -22,3 +22,8 @@ variable "instance_type" {
   type        = string
   description = "Tipo de instancia pro lauch template"
 }
+
+variable "iam_profile_name" {
+  type = string
+  description = "IAM role para EC2"
+}

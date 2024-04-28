@@ -17,15 +17,24 @@ resource "aws_security_group_rule" "ingress-ec2" {
   source_security_group_id = var.alb-sg
 }
 
-# # REGRA DE SAIDA PADRAO
-# resource "aws_security_group_rule" "lt-security-group_egress_traffic" {
-#   type              = "egress"
-#   from_port         = 0
-#   to_port           = 0
-#   protocol          = "-1"
-#   security_group_id = aws_security_group.lt-security-group.id
-#   cidr_blocks       = ["0.0.0.0/0"]
-# }
+resource "aws_security_group_rule" "https-ingress-ec2" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lt-security-group.id
+  source_security_group_id = var.alb-sg
+}
+
+# REGRA DE SAIDA PADRAO
+resource "aws_security_group_rule" "lt-security-group_egress_traffic" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.lt-security-group.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
 
 # FILTRAR AS AMI DA MINHA CONTA, PEGANDO PELA TAG NAME
 data "aws_ami" "app-projeto17" {
@@ -46,6 +55,10 @@ resource "aws_launch_template" "lt-config" {
   key_name               = var.key-pair
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.lt-security-group.id]
+
+  iam_instance_profile {
+    name = var.iam_profile_name
+  }
 
   block_device_mappings {
     device_name = "/dev/sda1"
